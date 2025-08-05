@@ -20,13 +20,13 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
 
         builder
             .HasOne(x => x.CreatedByUser)
-            .WithMany(x => x.Tickets)
-            .HasForeignKey(x => x.AssignedToUserId)
+            .WithMany(x => x.CreatedTickets)
+            .HasForeignKey(x => x.CreatedByUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(x => x.AssignedToUser)
-            .WithMany(x => x.Tickets)
+            .WithMany(x => x.AssignedTickets)
             .HasForeignKey(x => x.AssignedToUserId)
             .OnDelete(DeleteBehavior.Restrict);
     }

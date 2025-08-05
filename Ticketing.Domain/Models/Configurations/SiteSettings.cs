@@ -1,4 +1,4 @@
-﻿namespace Ticketing.Api.Models;
+﻿namespace Ticketing.Domain.Models.Configurations;
 
 public class SiteSettings
 {

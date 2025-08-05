@@ -25,27 +25,38 @@ public static class SwaggerConfigurationExtensions
             //Enable to use [SwaggerRequestExample] & [SwaggerResponseExample]
             options.ExampleFilters();
 
-            //Set summary of action if not already set
-            options.OperationFilter<ApplySummariesOperationFilter>();
-
             #region Add UnAuthorized to Response
             //Add 401 response and security requirements (Lock icon) to actions that need authorization
-            options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, "OAuth2");
+            options.OperationFilter<UnauthorizedResponsesOperationFilter>(true, "Bearer");
             #endregion
 
             #region Add Jwt Authentication            
             //OAuth2Scheme
-            options.AddSecurityDefinition("OAuth2", new OpenApiSecurityScheme
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Type = SecuritySchemeType.OAuth2,
-                Flows = new OpenApiOAuthFlows
+                Description = "توکن JWT را به صورت Bearer {token} وارد کنید",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
                 {
-                    Password = new OpenApiOAuthFlow
+                    new OpenApiSecurityScheme
                     {
-                        TokenUrl = new Uri("/api/v1/account/sign-in", UriKind.Relative)
-                    }
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
                 }
             });
+
             #endregion
         });
     }

@@ -24,13 +24,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
            .IsRequired();
 
         builder
-            .HasMany(x => x.Tickets)
+            .HasMany(x => x.CreatedTickets)
             .WithOne(x => x.CreatedByUser)
             .HasForeignKey(x => x.CreatedByUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasMany(x => x.Tickets)
+            .HasMany(x => x.AssignedTickets)
             .WithOne(x => x.AssignedToUser)
             .HasForeignKey(x => x.AssignedToUserId)
             .OnDelete(DeleteBehavior.Restrict);

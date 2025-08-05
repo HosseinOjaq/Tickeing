@@ -1,32 +1,41 @@
-using Ticketing.Api.Models;
 using Ticketing.Application;
 using Ticketing.Api.Extensions;
 using Ticketing.Infrastructure;
 using Ticketing.Api.Middlewares;
+using Ticketing.Domain.Models.Configurations;
 
-var builder = WebApplication.CreateBuilder(args);
+internal class Program
+{
+    private static async Task Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddControllers();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-builder.Services.RegisterApplicationServices()
-                .RegisterInfrastructureServices(builder.Configuration);
+        builder.Services.RegisterApplicationServices()
+                        .RegisterInfrastructureServices(builder.Configuration);
 
-builder.Services.AddSwagger();
+        builder.Services.AddSwagger();
 
-var siteSettingsConfiguration = builder.Configuration.GetSection(nameof(SiteSettings));
-var siteSettings = siteSettingsConfiguration.Get<SiteSettings>();
+        var siteSettingsConfiguration = builder.Configuration.GetSection(nameof(SiteSettings));
+        var siteSettings = siteSettingsConfiguration.Get<SiteSettings>();
 
-builder.Services.AddJwtAuthentication(siteSettings!.JwtSettings);
+        builder.Services.AddSingleton(siteSettings!);
 
-var app = builder.Build();
-app.UseCustomExceptionHandler();
-app.UseSwaggerAndUI();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
+        builder.Services.AddJwtAuthentication(siteSettings!.JwtSettings);
 
-await app.RunAsync();
+        var app = builder.Build();
+        app.UseCustomExceptionHandler();
+        app.UseSwaggerAndUI();
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
+
+        await app.RunAsync();
+    }
+}

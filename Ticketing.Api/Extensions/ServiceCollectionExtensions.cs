@@ -1,12 +1,10 @@
 ﻿using System.Net;
 using System.Text;
-using Ticketing.Api.Models;
 using Ticketing.Common.Enums;
 using System.Security.Claims;
 using Ticketing.Common.Exceptions;
-using Ticketing.Common.Extensions;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Ticketing.Domain.Models.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Ticketing.Api.Extensions;
@@ -60,11 +58,7 @@ public static class ServiceCollectionExtensions
                 {
                     var claimsIdentity = context.Principal!.Identity as ClaimsIdentity;
                     if (claimsIdentity!.Claims?.Any() != true)
-                        context.Fail("توکن نامعتبر می باشد");
-
-                    var securityStamp = claimsIdentity?.FindFirst(new ClaimsIdentityOptions().SecurityStampClaimType)?.Value;
-                    if (!securityStamp.HasValue())
-                        context.Fail("توکن نامعتبر می باشد");
+                        context.Fail("توکن نامعتبر می باشد");                    
                 },
                 OnChallenge = context =>
                 {
