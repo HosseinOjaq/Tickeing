@@ -17,7 +17,6 @@ public static class ConfigureServices
             .GetConnectionString("TicketingDbContext")));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITicketRepository, TicketRepository>();
 

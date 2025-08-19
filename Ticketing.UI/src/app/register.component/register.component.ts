@@ -24,7 +24,7 @@ export class RegisterComponent {
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: [2, Validators.required] // مقدار پیش‌فرض Employee
+      role: [2, Validators.required] 
     });
   }
 
@@ -44,7 +44,7 @@ export class RegisterComponent {
           Swal.fire('موفق!', 'ثبت‌نام با موفقیت انجام شد', 'success');
           this.router.navigate(['/login']);
         } else {
-          Swal.fire('خطا', res.messages.map((m: any) => m.message).join(', '), 'error');
+          Swal.fire('خطا', res.messages.map((m: any) => m.message).join(','), 'error');
         }
       },
       error: (err) => {

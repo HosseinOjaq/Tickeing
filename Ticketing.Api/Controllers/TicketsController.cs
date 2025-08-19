@@ -5,19 +5,26 @@ using Ticketing.Api.Configurations;
 using Microsoft.AspNetCore.Authorization;
 using Ticketing.Application.Common.Contracts;
 using Ticketing.Application.Models.DTOs.Tickets;
-using Ticketing.Domain.Entities;
 
 namespace Ticketing.Api.Controllers;
 
 [Authorize]
-public class TicketsController(ITicketService ticketService, IHttpContextAccessor httpContextAccessor) : BaseApiController
+public class TicketsController(ITicketService ticketService,
+    IHttpContextAccessor httpContextAccessor) : BaseApiController
 {
-    [HttpPost]
-    [Authorize(Roles = "Employee")]
-    public async Task<ApiResult<CreateTicketResponseDto>> CreateAsync(CreateTicketRequestDto request, CancellationToken cancellationToken)
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin,Employee")]
+    public async Task<ApiResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var userId = httpContextAccessor.GetUserId();
-        return await ticketService.CreateAsync(userId, request, cancellationToken);
+        await ticketService.DeleteAsync(id, cancellationToken);
+        return Ok();
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<ApiResult<List<TicketDto>>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await ticketService.GetAllAsync(cancellationToken);
     }
 
     [HttpGet("my")]
@@ -28,26 +35,12 @@ public class TicketsController(ITicketService ticketService, IHttpContextAccesso
         return await ticketService.GetMyTicketsAsync(userId, cancellationToken);
     }
 
-    [HttpGet]
-    [Authorize(Roles = "Admin")]
-    public async Task<ApiResult<List<TicketDto>>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await ticketService.GetAllAsync(cancellationToken);
-    }
-
     [HttpPut("{id:guid}")]
     [Authorize(Roles = "Admin")]
     public async Task<ApiResult<TicketDto>> AssignAsync(Guid id, CancellationToken cancellationToken)
     {
         var userId = httpContextAccessor.GetUserId();
         return await ticketService.AssignmentAsync(id, userId, cancellationToken);
-    }
-
-    [HttpGet("stats")]
-    [Authorize(Roles = "Admin")]
-    public async Task<ApiResult<List<TicketStatsDto>>> GetStatsAsync(CancellationToken cancellationToken)
-    {
-        return await ticketService.GetTicketStatsAsync(cancellationToken);
     }
 
     [HttpGet("{id:guid}")]
@@ -58,21 +51,27 @@ public class TicketsController(ITicketService ticketService, IHttpContextAccesso
         return await ticketService.GetByIdAsync(id, userId, cancellationToken);
     }
 
-    [HttpDelete("{id:guid}")]
-    [Authorize(Roles = "Admin,Employee")]
-    public async Task<ApiResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    [HttpGet("stats")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ApiResult<List<TicketStatsDto>>> GetStatsAsync(CancellationToken cancellationToken)
     {
-        await ticketService.DeleteAsync(id, cancellationToken);
-        return Ok();
+        return await ticketService.GetTicketStatsAsync(cancellationToken);
     }
-
 
     [HttpPut("Update")]
     [Authorize(Roles = "Employee")]
-    public async Task<ApiResult> UpadateAsync( UpdateTicketRequestDto ticket,  CancellationToken cancellationToken)
+    public async Task<ApiResult<UpdateTicketResponseDto>> UpadateAsync( UpdateTicketRequestDto ticket,  CancellationToken cancellationToken)
     {
         var userId = httpContextAccessor.GetUserId();
-        await ticketService.UpdateAsync(ticket, userId, cancellationToken);
-        return Ok();
+
+        return await ticketService.UpdateAsync(ticket,userId, cancellationToken);
     }
+    [HttpPost]
+    [Authorize(Roles = "Employee")]
+    public async Task<ApiResult<CreateTicketResponseDto>> CreateAsync(CreateTicketRequestDto request, CancellationToken cancellationToken)
+    {
+        var userId = httpContextAccessor.GetUserId();
+        return await ticketService.CreateAsync(userId, request, cancellationToken);
+    }
+
 }

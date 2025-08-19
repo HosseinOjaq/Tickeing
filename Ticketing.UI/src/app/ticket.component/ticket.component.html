@@ -17,35 +17,35 @@
         </tr>
       </tbody>
     </table>
+     <h2>مدیریت کل تیکت‌ها  </h2>
   }
-
-  <h2>مدیریت تیکت‌ها</h2>
-
   @if (!isAdmin)
   {
-    <form [formGroup]="ticketForm" class="new-ticket">
-      <div>
-        <label for="title">عنوان</label>
-        <input type="text" id="title" placeholder="عنوان" formControlName="title">
-        @if (ticketForm.get('title')?.touched && ticketForm.get('title')?.invalid)
-        {
-          <small>الزامی است</small>
-        }
-      </div>
+    <h2>ثبت تیکت جدید</h2>
+   <form [formGroup]="ticketForm" class="new-ticket">
+  <div>
+    <label for="title">عنوان</label>
+    <input type="text" id="title" placeholder="عنوان" formControlName="title">
 
-      <div>
-        <label for="description">توضیحات</label>
-        <input type="text" id="description" placeholder="توضیحات" formControlName="description">
-        @if (ticketForm.get('description')?.touched && ticketForm.get('description')?.invalid)
-        {
-          <small>الزامی است</small>
-        }
-      </div>
+    @if (ticketForm.get('title')?.touched && ticketForm.get('title')?.invalid) {
+      <small>{{ getErrorMessage('title') }}</small>
+    }
+  </div>
 
-      <button type="button" (click)="addTicket()">افزودن تیکت</button>
-    </form>
+  <div>
+    <label for="description">توضیحات</label>
+    <input type="text" id="description" placeholder="توضیحات" formControlName="description">
+
+    @if (ticketForm.get('description')?.touched && ticketForm.get('description')?.invalid) {
+      <small>{{ getErrorMessage('description') }}</small>
+    }
+  </div>
+
+  <button type="button" (click)="addTicket()">افزودن تیکت</button>
+</form>
+
+     <h2>مدیریت تیکت های من</h2>
   }
-
   <table [ngClass]="tickets.length > 0 ? '' : 'hidden'">
     <thead>
       <tr>

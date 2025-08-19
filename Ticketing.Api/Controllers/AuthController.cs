@@ -10,11 +10,6 @@ namespace Ticketing.Api.Controllers;
 
 public class AuthController(IUserService userService) : BaseApiController
 {
-    [HttpPost("login")]
-    public async Task<ApiResult<LoginResponseDto>> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken)
-    {
-        return await userService.LoginAsync(request, cancellationToken);
-    }
     [Authorize]
     [HttpGet("Roles")]
     public ApiResult<List<string>> GetRoles()
@@ -22,6 +17,12 @@ public class AuthController(IUserService userService) : BaseApiController
        return User.Claims.Where(c => c.Type == ClaimTypes.Role)
                         .Select(c => c.Value)
                         .ToList();
+    }
+
+    [HttpPost("login")]
+    public async Task<ApiResult<LoginResponseDto>> LoginAsync(LoginRequestDto request, CancellationToken cancellationToken)
+    {
+        return await userService.LoginAsync(request, cancellationToken);
     }
 
     [HttpPost("Register")]

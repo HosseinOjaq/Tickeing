@@ -26,19 +26,18 @@ public class TicketRepository(TicketingDbContext context) : ITicketRepository
         return await context.Tickets
             .SingleOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
-    public async Task<List<Ticket>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        return await context.Tickets
-            .AsNoTracking()
-            .Where(t => t.CreatedByUserId == userId)
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<Dictionary<StatusType, int>> GetStatsAsync(CancellationToken cancellationToken)
     {
         return await context.Tickets
             .GroupBy(t => t.Status)
             .Select(g => new { Status = g.Key, Count = g.Count() })
             .ToDictionaryAsync(x => x.Status, x => x.Count, cancellationToken);
+    }
+    public async Task<List<Ticket>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await context.Tickets
+            .AsNoTracking()
+            .Where(t => t.CreatedByUserId == userId)
+            .ToListAsync(cancellationToken);
     }
 }

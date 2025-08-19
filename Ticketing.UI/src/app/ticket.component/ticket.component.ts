@@ -21,10 +21,28 @@ export class TicketComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private ticketService: TicketService,private authService: AuthService) {
     this.ticketForm = this.fb.group({
-      title: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.minLength(6)]]
+      title: ['', [Validators.required, Validators.minLength(4)]],
+      description: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
+
+  getErrorMessage(controlName: string): string {
+  const control = this.ticketForm.get(controlName);
+
+     if (control?.hasError('required')) {
+      return 'این فیلد الزامی است';
+     }
+     if (control?.hasError('minlength')) {
+    const requiredLength = control.getError('minlength').requiredLength;
+    return `حداقل باید ${requiredLength} کاراکتر باشد`;
+     }
+      if (control?.hasError('maxlength')) {
+    const requiredLength = control.getError('maxlength').requiredLength;
+    return `حداکثر ${requiredLength} کاراکتر مجاز است`;
+     }
+
+      return '';
+    }
 
   async ngOnInit() {
     await this.checkAdminRole();
