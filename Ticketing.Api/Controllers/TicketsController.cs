@@ -5,6 +5,7 @@ using Ticketing.Api.Configurations;
 using Microsoft.AspNetCore.Authorization;
 using Ticketing.Application.Common.Contracts;
 using Ticketing.Application.Models.DTOs.Tickets;
+using Ticketing.Domain.Entities;
 
 namespace Ticketing.Api.Controllers;
 
@@ -13,7 +14,7 @@ public class TicketsController(ITicketService ticketService, IHttpContextAccesso
 {
     [HttpPost]
     [Authorize(Roles = "Employee")]
-    public async Task<ApiResult<CreateTicketResponseDto>> CreateAsync( CreateTicketRequestDto request, CancellationToken cancellationToken)
+    public async Task<ApiResult<CreateTicketResponseDto>> CreateAsync(CreateTicketRequestDto request, CancellationToken cancellationToken)
     {
         var userId = httpContextAccessor.GetUserId();
         return await ticketService.CreateAsync(userId, request, cancellationToken);
@@ -58,10 +59,20 @@ public class TicketsController(ITicketService ticketService, IHttpContextAccesso
     }
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Employee")]
     public async Task<ApiResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         await ticketService.DeleteAsync(id, cancellationToken);
+        return Ok();
+    }
+
+
+    [HttpPut("Update")]
+    [Authorize(Roles = "Employee")]
+    public async Task<ApiResult> UpadateAsync( UpdateTicketRequestDto ticket,  CancellationToken cancellationToken)
+    {
+        var userId = httpContextAccessor.GetUserId();
+        await ticketService.UpdateAsync(ticket, userId, cancellationToken);
         return Ok();
     }
 }

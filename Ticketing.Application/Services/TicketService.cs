@@ -117,11 +117,14 @@ public class TicketService(IUnitOfWork uow, ITicketRepository ticketRepository) 
         return result;
     }
 
-    public async Task<OperationResult<UpdateTicketResponseDto>> UpdateAsync(UpdateTicketRequestDto request, CancellationToken cancellationToken)
+    public async Task<OperationResult<UpdateTicketResponseDto>> UpdateAsync(UpdateTicketRequestDto request,Guid userId, CancellationToken cancellationToken)
     {
         var ticket = await ticketRepository.GetByIdAsync(request.Id, cancellationToken);
         if (ticket is null)
             return ErrorModel.Create("InvalidId", "شناسه نامعتبر");
+
+        if (ticket.CreatedByUserId !=userId)
+            return ErrorModel.Create("InvalidId", "کاربری که تیکت را ایجاد کرده اجازه دارد");
 
         ticket.Update(request.Title,
             request.Description,

@@ -1,0 +1,78 @@
+<div class="ticket-container">
+
+  @if (isAdmin)
+  {
+    <h2>آمار</h2>
+    <table [ngClass]="stats.length > 0 ? '' : 'hidden'">
+      <thead>
+        <tr>
+          <th>عنوان</th>
+          <th>تعداد</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stat of stats">
+          <td>{{ stat.status }}</td>
+          <td>{{ stat.count }}</td>
+        </tr>
+      </tbody>
+    </table>
+  }
+
+  <h2>مدیریت تیکت‌ها</h2>
+
+  @if (!isAdmin)
+  {
+    <form [formGroup]="ticketForm" class="new-ticket">
+      <div>
+        <label for="title">عنوان</label>
+        <input type="text" id="title" placeholder="عنوان" formControlName="title">
+        @if (ticketForm.get('title')?.touched && ticketForm.get('title')?.invalid)
+        {
+          <small>الزامی است</small>
+        }
+      </div>
+
+      <div>
+        <label for="description">توضیحات</label>
+        <input type="text" id="description" placeholder="توضیحات" formControlName="description">
+        @if (ticketForm.get('description')?.touched && ticketForm.get('description')?.invalid)
+        {
+          <small>الزامی است</small>
+        }
+      </div>
+
+      <button type="button" (click)="addTicket()">افزودن تیکت</button>
+    </form>
+  }
+
+  <table [ngClass]="tickets.length > 0 ? '' : 'hidden'">
+    <thead>
+      <tr>
+        <th>عنوان</th>
+        <th>توضیحات</th>
+        <th>عملیات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ticket of tickets">
+        <td><input [(ngModel)]="ticket.title"></td>
+        <td><input [(ngModel)]="ticket.description"></td>
+        <td>
+          @if (ticket.status == 1)
+          {
+            @if (isAdmin)
+            {
+              <button (click)="inprogressTicket(ticket)">پیگیری</button>
+            }
+            @if (!isAdmin)
+            {
+              <button (click)="updateTicket(ticket)">بروز رسانی</button>
+            }
+          }
+          <button (click)="deleteTicket(ticket)">حذف</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

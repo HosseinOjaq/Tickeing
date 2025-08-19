@@ -31,7 +31,7 @@ public class Ticket : BaseEntity<Guid>
             Priority = priority,
             AssignedToUserId = null,
         };
-    public void Update(string title, string description, Guid createdByUserId, Guid assignedToUserId, PriorityType priority, StatusType status)
+    public void Update(string title, string description, Guid createdByUserId, Guid? assignedToUserId, PriorityType priority, StatusType status)
     {
         Title = title;
         Description = description;

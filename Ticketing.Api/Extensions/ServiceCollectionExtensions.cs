@@ -77,4 +77,12 @@ public static class ServiceCollectionExtensions
             };
         });
     }
+    public static void AddCustomCors(this IServiceCollection services)
+    {
+        services.AddCors(options => options.AddPolicy("CustomCors", builder =>
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()
+        ));
+    }
 }

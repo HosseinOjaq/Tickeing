@@ -10,5 +10,5 @@ public record UpdateTicketRequestDto
     public StatusType Status { get; set; }
     public PriorityType Priority { get; set; }
     public Guid CreatedByUserId { get; set; }
-    public Guid AssignedToUserId { get; set; }
+    public Guid? AssignedToUserId { get; set; }
 }

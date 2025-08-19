@@ -1,0 +1,7 @@
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<button [ngClass]="auth.isAuthenticated() ? '' : 'hidden'" class="logout-button" id="logout-btn" (click)="logout()">خروج</button>

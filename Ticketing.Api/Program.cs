@@ -10,6 +10,7 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddCustomCors();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers();
 
@@ -29,6 +30,7 @@ internal class Program
         builder.Services.AddJwtAuthentication(siteSettings!.JwtSettings);
 
         var app = builder.Build();
+        app.UseCors("CustomCors");
         app.UseCustomExceptionHandler();
         app.UseSwaggerAndUI();
         app.UseRouting();
