@@ -22,8 +22,10 @@ export class LoginComponent {
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
-
-  submit() {
+      goToRegister() {
+      this.router.navigate(['/register']);
+        }
+     submit() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;

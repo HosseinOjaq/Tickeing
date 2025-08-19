@@ -47,4 +47,9 @@ export class AuthService {
     getRoles(): Observable<{ data: string[] }> {
     return this.http.get<{ data: string[] }>(`${this.apiUrl}/api/Auth/Roles`);
   }
+register(payload: any) {
+  return this.http.post(`${this.apiUrl}/api/Auth/Register`, payload, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
 }

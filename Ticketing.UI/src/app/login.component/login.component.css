@@ -31,3 +31,17 @@
 .form-group {
   padding-left: 20px;
 }
+.register-btn {
+  background-color: #28a745; /* سبز */
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.register-btn:hover {
+  background-color: #218838;
+}

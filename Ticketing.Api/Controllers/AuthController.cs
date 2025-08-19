@@ -23,4 +23,12 @@ public class AuthController(IUserService userService) : BaseApiController
                         .Select(c => c.Value)
                         .ToList();
     }
+
+    [HttpPost("Register")]
+    public async Task<ApiResult<RegisterResponseDto>> RegisterAsync( RegisterRequestDto request, CancellationToken cancellationToken)
+    {
+        var result = await userService.CreateAsync(request, cancellationToken);
+
+        return result;
+    }
 }

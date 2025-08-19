@@ -4,6 +4,7 @@ using Ticketing.Domain.Entities;
 using Ticketing.Domain.Repositories;
 using Ticketing.Application.Common.Contracts;
 using Ticketing.Application.Models.DTOs.Tickets;
+using Ticketing.Common.Extensions;
 
 namespace Ticketing.Application.Services;
 
@@ -109,7 +110,7 @@ public class TicketService(IUnitOfWork uow, ITicketRepository ticketRepository) 
         var stats = await ticketRepository.GetStatsAsync(cancellationToken);
         var result = stats.Select(x => new TicketStatsDto
         {
-            Status = x.Key,
+            Status = x.Key.ToDisplay().ToString(),
             Count = x.Value
         })
         .ToList();

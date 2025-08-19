@@ -1,9 +1,10 @@
-﻿using Ticketing.Domain.Enums;
+﻿using System.Security.Cryptography;
+using Ticketing.Domain.Enums;
 
 namespace Ticketing.Application.Models.DTOs.Tickets;
 
 public class TicketStatsDto
 {
-    public StatusType Status { get; set; }
+    public string Status { get; set; }
     public int Count { get; set; }
 }
