@@ -10,6 +10,8 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        Stimulsoft.Base.StiLicense.Key = "";
+
         builder.Services.AddCustomCors();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddControllers();
@@ -30,6 +32,9 @@ internal class Program
         builder.Services.AddJwtAuthentication(siteSettings!.JwtSettings);
 
         var app = builder.Build();
+
+        app.UseStaticFiles();
+
         app.UseCors("CustomCors");
         app.UseCustomExceptionHandler();
         app.UseSwaggerAndUI();

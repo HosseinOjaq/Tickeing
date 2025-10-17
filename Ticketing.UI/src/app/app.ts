@@ -1,12 +1,12 @@
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from "@angular/router";
-import { Component } from '@angular/core';
-import { HeaderComponent } from './header.component/header.component';
+import { EducationReport } from './education-report/education-report';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderComponent],
+  imports: [CommonModule, RouterModule, EducationReport],
   template: `<app-header></app-header><router-outlet></router-outlet>`
 })
-export class App {}
+export class App { }
